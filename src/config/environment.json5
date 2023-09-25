@@ -1,0 +1,7 @@
+{
+  "client": {
+    "token": "DEXIO_TOKEN",
+    "publicKey": "DEXIO_PUBLIC_KEY",
+    "applicationId": "DEXIO_APPLICATION_ID"
+  }
+}

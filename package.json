@@ -5,10 +5,11 @@
   "type": "module",
   "main": "src/index.js",
   "scripts": {
+    "coverage": "vitest --coverage",
     "fix": "xo --fix",
     "lint": "xo",
     "start": "node .",
-    "test": "jest"
+    "test": "vitest"
   },
   "repository": {
     "type": "git",
@@ -40,7 +41,8 @@
     "zod-validation-error": "^1.5.0"
   },
   "devDependencies": {
-    "jest": "^29.6.4",
+    "@vitest/coverage-v8": "^0.34.6",
+    "vitest": "^0.34.6",
     "xo": "^0.56.0"
   },
   "engines": {

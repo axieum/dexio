@@ -38,7 +38,9 @@ export const ConfigSchema = z.object({
 export function loadDefaults() {
   log.verbose('Applying default configuration');
   const content = fs.readFileSync(new URL('default.json5', import.meta.url)).toString();
-  return JSON5.parse(content);
+  const object = JSON5.parse(content);
+  log.debug('Default config: %s', inspect(object, {colors: true}));
+  return object;
 }
 
 /**
@@ -61,10 +63,12 @@ export function loadUserConfig() {
     return {};
   }
 
-  // Attempt to read the
+  // Attempt to read the config file
   try {
     const content = fs.readFileSync(USER_CONFIG).toString();
-    return JSON5.parse(content);
+    const object = JSON5.parse(content);
+    log.debug('User config: %s', inspect(object, {colors: true}));
+    return object;
   } catch (error) {
     log.error('Unable to read user configuration file!\n%s', error);
     return {};
@@ -84,7 +88,7 @@ export function loadEnvironment() {
   const replaceWithEnv = object => Object.keys(object).forEach(key => {
     const value = object[key];
     if (typeof value === 'string') {
-      if (Object.hasOwn(process.env, value)) {
+      if (Object.hasOwn(process.env, value) && process.env[value] !== null) {
         log.debug('%s → %s', value, process.env[value]);
         object[key] = process.env[value];
       } else {
@@ -96,13 +100,15 @@ export function loadEnvironment() {
   });
   replaceWithEnv(parsed);
 
+  log.debug('Environment config: %s', inspect(parsed, {colors: true}));
+
   return parsed;
 }
 
 /**
  * Loads, validates and returns the configuration file.
  *
- * @return {object} validated config object
+ * @return {object|null} validated config object or null if invalid
  */
 export function getConfig() {
   log.info('Loading configuration...');
@@ -126,11 +132,13 @@ export function getConfig() {
           `We found ${chalk.bold.underline(`${error.issues.length} ${error.issues.length === 1 ? 'issue' : 'issues'}`)} with your configuration:`,
         ),
       );
+    /* c8 ignore next 3 */
     } else {
-      log.error('The configuration could not be validated!');
+      log.error('The configuration could not be validated!\n%s', error);
     }
 
-    process.exit(78); // Configuration error
+    process.exitCode = 78; // Configuration error
+    return null;
   }
 
   // Finally, return the validated config object

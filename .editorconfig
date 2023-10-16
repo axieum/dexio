@@ -11,9 +11,10 @@ indent_style = space
 trim_trailing_whitespace = true
 
 [*.{js,cjs}]
+indent_size = 2
 max_line_length = 120
 
-[*.{json,yml}]
+[*.{json,json5,yml}]
 indent_size = 2
 
 [*.md]

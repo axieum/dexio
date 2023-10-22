@@ -32,9 +32,11 @@
   "homepage": "https://github.com/axieum/dexio#readme",
   "dependencies": {
     "chalk": "^5.3.0",
+    "discord.js": "^14.13.0",
     "gradient-string": "^2.0.2",
     "json5": "^2.2.3",
     "lodash": "^4.17.21",
+    "slash-create": "^5.14.0",
     "winston": "^3.10.0",
     "winston-daily-rotate-file": "^4.7.1",
     "zod": "^3.22.2",

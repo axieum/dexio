@@ -3,10 +3,14 @@
  * @author Jonathan Hiles <jonathan@hil.es>
  */
 
+import process from 'node:process';
 import chalk from 'chalk';
+import {Client, GatewayIntentBits} from 'discord.js';
 import gradient from 'gradient-string';
+import {SlashCreator} from 'slash-create';
 import {getConfig} from './config/index.js';
-import {log} from './logging.js';
+import {LABELS, log} from './logging.js';
+import {syncSlashCommands} from './slash.js';
 
 /**********************************************************************/
 // Print a splash message.
@@ -16,3 +20,29 @@ console.log(' '.repeat(33) + chalk.grey('└ by Axieum') + '\n');
 /**********************************************************************/
 // Load the configuration to be used throughout the bot.
 const config = getConfig();
+
+/**********************************************************************/
+// Spin up a new Discord client.
+const client = new Client({intents: [GatewayIntentBits.Guilds]});
+
+client.once('ready', () => log.log('success', gradient.pastel(`Ready! Logged in as ${client.user.tag}`), LABELS.DISCORD));
+
+/**********************************************************************/
+// Register and sync Discord slash interactions.
+const slash = new SlashCreator({
+  token: config.client.token,
+  publicKey: config.client.publicKey,
+  applicationID: config.client.applicationId,
+  client,
+});
+
+await syncSlashCommands(slash);
+
+/**********************************************************************/
+// Login to Discord.
+await client
+  .login(config.client.token)
+  .catch(error => {
+    log.error('Unable to login to Discord!\n%s', error, LABELS.DISCORD);
+    process.exitCode = 1; // Error
+  });

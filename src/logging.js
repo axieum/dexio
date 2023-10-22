@@ -43,6 +43,7 @@ const SYMBOLS = {
 export const LABELS = {
   DISCORD: {label: 'discord'},
   COMMANDS: {label: 'commands'},
+  CONFIG: {label: 'config'},
   POKEMON: {label: 'pokémon'},
   POKESTOPS: {label: 'pokéstops'},
   GYMS: {label: 'gyms'},
@@ -54,6 +55,7 @@ export const LABELS = {
 const STYLED_LABELS = {
   discord: chalk.hex('#ffbb33')('[DISCORD]'),
   commands: chalk.hex('#ffdc9c')('[COMMANDS]'),
+  config: chalk.hex('#f6e3bf')('[CONFIG]'),
   pokémon: chalk.hex('#f44336')('[POKÉMON]'),
   pokéstops: chalk.hex('#e91e63')('[POKÉSTOPS]'),
   gyms: chalk.hex('#9c27b0')('[GYMS]'),
